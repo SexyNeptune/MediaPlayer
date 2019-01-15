@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">手机影音</string>
+    <string name="tv_name">视频名称</string>
+    <string name="tv_system_time">12:00</string>
+</resources>
