@@ -10,9 +10,13 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    compileOptions{
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -26,4 +30,11 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'org.jetbrains:annotations-java5:15.0'
+    implementation project(path: ':vitamio')
+    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
+//    implementation 'com.squareup.retrofit2:adapter-rxjava:2.8.1'
+//    implementation 'io.reactivex.rxjava2:rxjava:3.0.0'
+//    implementation 'io.reactivex.rxjava2:rxandroid:3.0.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }

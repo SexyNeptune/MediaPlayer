@@ -2,9 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.mobileplayer">
-    
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <application
         android:name=".utils.MyApplication"
         android:allowBackup="true"
@@ -13,6 +19,16 @@
         android:roundIcon="@drawable/login_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service
+            android:name=".service.MusicPlayerService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.mobileplayer_OPENAUDIO"/>
+            </intent-filter>
+        </service>
+
+        <activity android:name=".activity.AudioPlayer" />
         <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,14 +36,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity" android:launchMode="singleTask"
-            android:configChanges="screenSize|orientation|keyboardHidden"/>
-        <activity android:name=".activity.SystemVideoPlayer"
+        <activity
+            android:name=".activity.MainActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".activity.SystemVideoPlayer"
+            android:configChanges="screenSize|orientation|keyboardHidden"
             android:label="SZH的播放器"
             android:screenOrientation="landscape"
-            android:configChanges="screenSize|orientation|keyboardHidden"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
-            >
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -36,30 +54,43 @@
 
                 <data android:scheme="rtsp" />
             </intent-filter>
-            <intent-filter android:scheme="http"
+            <intent-filter
+                android:scheme="http"
                 tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="video/*" />
                 <data android:mimeType="application/sdp" />
             </intent-filter>
             <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW" />
 
-            <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-            <data android:scheme="http" />
-            <data android:mimeType="video/mp4" />
-            <data android:mimeType="video/3gp" />
-            <data android:mimeType="video/3gpp" />
-            <data android:mimeType="video/3gpp2" />
+                <data android:scheme="http" />
+                <data android:mimeType="video/mp4" />
+                <data android:mimeType="video/3gp" />
+                <data android:mimeType="video/3gpp" />
+                <data android:mimeType="video/3gpp2" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.Test"
-            android:theme="@android:style/Theme.Dialog"
-            />
+        <activity
+            android:name=".activity.Test"
+            android:theme="@android:style/Theme.Dialog" />
+        <activity
+            android:name=".activity.VitamioVideoPlayer"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" /> <!-- Don't forgot InitActivity -->
+        <activity
+            android:name="io.vov.vitamio.activity.InitActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
     </application>
 
 </manifest>

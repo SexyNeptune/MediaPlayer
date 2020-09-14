@@ -18,13 +18,13 @@ import com.example.mobileplayer.base.BasePager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
 
 
 @SuppressLint("ValidFragment")
 public class MyFragment extends Fragment {
 
     private int position;
-
     private List<BasePager> basePagers;
 
     @SuppressLint("ValidFragment")

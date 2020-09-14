@@ -3,8 +3,10 @@ package com.example.mobileplayer.activity;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
@@ -37,6 +39,8 @@ import com.example.mobileplayer.view.VideoView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import io.vov.vitamio.utils.Log;
 
 /**
  * 系统播放器
@@ -88,7 +92,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
     private LinearLayout ll_loading;
     private TextView tv_laoding_netspeed;
 
-    private Utils utils;
+    private Utils utils = new Utils();
 
     /**
      * 监听电量变化的广播
@@ -198,7 +202,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         seekbarVoice.setMax(maxVoice);
         seekbarVoice.setProgress(currentVoice);
 
-        handler.sendEmptyMessage(SHOW_SPEED);
+//        handler.sendEmptyMessage(SHOW_SPEED);
     }
 
     /**
@@ -215,6 +219,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
             updateVoice(currentVoice,isMute);
         } else if ( v == btnSwitchPlayer ) {
             // Handle clicks for btnSwitchPlayer
+            showSwichPlayerDialog();
         } else if ( v == btnExit ) {
             // Handle clicks for btnExit
         } else if ( v == btnVideoPre ) {
@@ -232,6 +237,21 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         }
         handler.removeMessages(HIDE_MEDIACONTROLLER);
         handler.sendEmptyMessageDelayed(HIDE_MEDIACONTROLLER,4000);
+        LogUtil.e("onClick ------------");
+    }
+
+    private void showSwichPlayerDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("系统播放器提醒您");
+        builder.setMessage("当您播放视频，有声音没有画面的时候，请切换万能播放器播放");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startVitamioPlayer();
+            }
+        });
+        builder.setNegativeButton("取消",null);
+        builder.show();
     }
 
     private void startAndPause() {
@@ -493,13 +513,14 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
                 //隐藏
                 hideMediaController();
                 //把隐藏消息移除
-                handler.removeMessages(HIDE_MEDIACONTROLLER);
+//                handler.removeMessages(HIDE_MEDIACONTROLLER);
             } else {
                 //显示
                 showMediaController();
                 //发消息隐藏
-                handler.sendEmptyMessageDelayed(HIDE_MEDIACONTROLLER ,4000);
+//                handler.sendEmptyMessageDelayed(HIDE_MEDIACONTROLLER ,4000);
             }
+            LogUtil.e("onSingleTapConfirmed --------------");
             return super.onSingleTapConfirmed(e);
         }
 
@@ -507,11 +528,13 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
         public void onLongPress(MotionEvent e) {
             super.onLongPress(e);
             startAndPause();
+            LogUtil.e("onLongPress --------------");
         }
 
         @Override//双击
         public boolean onDoubleTap(MotionEvent e) {
             setScreanDefaultAndFull();
+            LogUtil.e("onDoubleTap --------------");
             return super.onDoubleTap(e);
         }
     }
@@ -743,12 +766,43 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
             }
     }
 
-    class MyOnErrorListener implements MediaPlayer.OnErrorListener{
+    class MyOnErrorListener implements MediaPlayer.OnErrorListener {
+
         @Override
         public boolean onError(MediaPlayer mp, int what, int extra) {
-            Toast.makeText(SystemVideoPlayer.this, "播放出错啦", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(SystemVideoPlayer.this, "播放出错了哦", Toast.LENGTH_SHORT).show();
+            //1.播放的视频格式不支持--跳转到万能播放器继续播放
+            startVitamioPlayer();
+            //2.播放网络视频的时候，网络中断---1.如果网络确实断了，可以提示用于网络断了；2.网络断断续续的，重新播放
+            //3.播放的时候本地文件中间有空白---下载做完成
             return true;
         }
+    }
+
+    /**
+     * a,把数据按照原样传入VtaimoVideoPlayer播放器
+     b,关闭系统播放器
+     */
+    private void startVitamioPlayer() {
+
+        if(videoView != null){
+            videoView.stopPlayback();
+        }
+
+        Intent intent = new Intent(this,VitamioVideoPlayer.class);
+        if(mediaItems != null && mediaItems.size() > 0){
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("videolist", mediaItems);
+            intent.putExtras(bundle);
+            intent.putExtra("position", position);
+
+        }else if(uri != null){
+            intent.setData(uri);
+        }
+        startActivity(intent);
+
+        finish();//关闭页面
     }
 
     class MyOnCompletionListener implements MediaPlayer.OnCompletionListener{
@@ -780,6 +834,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
                 mVol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
                 touchRange = Math.min(screanHeight, screanWidth);//screenHeight
                 handler.removeMessages(HIDE_MEDIACONTROLLER);
+                LogUtil.e("onTouchEvent---------- ACTION_DOWN" );
                 break;
             case MotionEvent.ACTION_MOVE:
                 float endY = event.getY();
@@ -791,11 +846,14 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
                 if (delta != 0) {
                     updateVoice(voice, false);
                 }
+                LogUtil.e("onTouchEvent---------- ACTION_MOVE" );
                 break;
             case MotionEvent.ACTION_UP:
                 handler.sendEmptyMessageDelayed(HIDE_MEDIACONTROLLER, 4000);
+                LogUtil.e("onTouchEvent---------- ACTION_UP" );
                 break;
         }
+        Log.e("ada",SystemVideoPlayer.this);
         return super.onTouchEvent(event);
     }
 
@@ -848,6 +906,7 @@ public class SystemVideoPlayer extends Activity implements View.OnClickListener 
 
     @Override
     protected void onDestroy() {
+        handler.removeCallbacksAndMessages(null);
         //释放资源的时候，先释放子类，在释放父类
         if (receiver != null) {
             unregisterReceiver(receiver);

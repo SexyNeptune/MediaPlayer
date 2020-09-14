@@ -1,6 +1,7 @@
 package com.example.mobileplayer.domain;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 public class MediaItem implements Serializable{
     private String name;
@@ -12,6 +13,26 @@ public class MediaItem implements Serializable{
     private String data;
 
     private String artist;
+
+    private String desc;
+
+    private String imageUrl;
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
     public String getName() {
         return name;
@@ -25,7 +46,7 @@ public class MediaItem implements Serializable{
         return duration;
     }
 
-    public void setDuration(Long duration) {
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 
@@ -33,7 +54,7 @@ public class MediaItem implements Serializable{
         return size;
     }
 
-    public void setSize(Long size) {
+    public void setSize(long size) {
         this.size = size;
     }
 
@@ -61,6 +82,8 @@ public class MediaItem implements Serializable{
                 ", size=" + size +
                 ", data='" + data + '\'' +
                 ", artist='" + artist + '\'' +
+                ", desc='" + desc + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
 }

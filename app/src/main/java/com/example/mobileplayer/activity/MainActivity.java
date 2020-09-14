@@ -1,6 +1,7 @@
 package com.example.mobileplayer.activity;
 
 
+import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -20,12 +21,14 @@ import com.example.mobileplayer.pager.AudioPager;
 import com.example.mobileplayer.pager.NetAudioPager;
 import com.example.mobileplayer.pager.NetVideoPager;
 import com.example.mobileplayer.pager.VideoPager;
+import com.example.mobileplayer.utils.PermissionHelper;
+import com.example.mobileplayer.utils.PermissionInterface;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends FragmentActivity implements View.OnClickListener{
+public class MainActivity extends FragmentActivity implements View.OnClickListener , PermissionInterface {
 
     private FrameLayout fl_main_content;
 
@@ -38,6 +41,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private TextView tv_game;
 
     private ImageView tv_record;
+
+    private PermissionHelper helper ;
 
     /**
      * 页面的集合
@@ -58,12 +63,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         tv_game.setOnClickListener(this);
         tv_search.setOnClickListener(this);
         tv_record.setOnClickListener(this);
+        helper = new PermissionHelper(this,this);
 
         basePagers.add(new VideoPager(this));//添加本地视频页面-0
         basePagers.add(new AudioPager(this));//添加本地音乐界面-1
         basePagers.add(new NetVideoPager(this));//添加网络视频界面-2
         basePagers.add(new NetAudioPager(this));//添加网络音乐界面-3
         setFragment();
+        helper.requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,1);
 
         //设置RadioGroup的监听
         rg_bottom_tag.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -74,9 +81,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                         position = 0;
                         break;
                     case R.id.rb_audio:
-                        if(VideoPager.isGrantExternalRW(MainActivity.this)){
                             position = 1;
-                        }
                         break;
                     case R.id.rb_net_video:
                         position = 2;
@@ -121,4 +126,25 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break;
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        helper.requestPermissionsResult(requestCode,permissions,grantResults);
+    }
+
+
+    @Override
+    public void requestPermissionsSuccess(int callBackCode) {
+        if (callBackCode ==1){
+
+        }
+    }
+
+    @Override
+    public void requestPermissionsFail(int callBackCode) {
+        if (callBackCode ==1){
+            Toast.makeText(MainActivity.this,"获取权限失败",Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }
