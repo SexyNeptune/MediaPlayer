@@ -1,14 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <Button
-        android:id="@+id/play"
+        android:id="@+id/start"
         android:onClick="StartAllPlayer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="打开所有播放器"
+        android:text="启动服务"
          />
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/stop"
+        android:onClick="StartAllPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="停止服务"
+        />
+
+    <Button
+        android:id="@+id/bind"
+        android:onClick="StartAllPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="绑定服务"
+        />
+
+    <LinearLayout
+        android:id="@+id/main_ll_download"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/start_download"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="开始下载"/>
+
+        <TextView
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/unbind"
+        android:onClick="StartAllPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="解除绑定"
+        />
+
+    <Button
+        android:id="@+id/query_media"
+        android:onClick="StartAllPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="查询媒体数据"
+        />
+
+</LinearLayout>

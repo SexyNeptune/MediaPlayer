@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "D:\\MyDownloads\\Android Studio\\AndroidStudioProjects\\MobilePlayer\\vitamio-sample\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-land\\values-land.xml",
+            "outputFile": "/Users/bytedance/MediaPlayer/vitamio-sample/build/intermediates/incremental/mergeDebugResources/merged.dir/values-land/values-land.xml",
             "map": [
                 {
-                    "source": "D:\\MyDownloads\\Android Studio\\.gradle\\caches\\transforms-2\\files-2.1\\ae9477256a1a91dcfb83492748cc6fff\\res\\values-land\\values-land.xml",
+                    "source": "/Users/bytedance/.gradle/caches/transforms-2/files-2.1/f20f570bd27a095fb60e976cb5196c54/res/values-land/values-land.xml",
                     "from": {
                         "startLines": "4,7,10,11,14,17,18",
                         "startColumns": "4,4,4,4,4,4,4",

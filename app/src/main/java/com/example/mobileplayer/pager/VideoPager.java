@@ -31,6 +31,8 @@ import com.example.mobileplayer.utils.LogUtil;
 
 import java.util.ArrayList;
 
+import io.vov.vitamio.utils.Log;
+
 /**
  * 本地视频页面
  */
@@ -161,10 +163,11 @@ public class VideoPager extends BasePager{
 
                         String artist = cursor.getString(4);
                         mediaItem.setArtist(artist);
-
                     }
                     cursor.close();
                 }
+
+                LogUtil.d(mediaItems.toString());
 
                 //handler发消息
                 handler.sendEmptyMessage(10);

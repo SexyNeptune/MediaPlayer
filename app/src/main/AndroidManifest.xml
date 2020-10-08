@@ -24,7 +24,7 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.example.mobileplayer_OPENAUDIO"/>
+                <action android:name="com.example.mobileplayer_OPENAUDIO" />
             </intent-filter>
         </service>
 
